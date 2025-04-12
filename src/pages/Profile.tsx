@@ -15,7 +15,7 @@ import NLPAssistant from '@/components/NLPAssistant';
 import MedicationReminder from '@/components/MedicationReminder';
 import DailyPatientRecordComponent from '@/components/DailyPatientRecord';
 import TextToSpeechButton from '@/components/TextToSpeechButton';
-import ADRTest from '@/components/ADRTest';
+
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth();
@@ -72,29 +72,9 @@ const Profile = () => {
     setActiveTab('profile');
   };
 
-  const handleADRTestComplete = (result: ADRTestResult) => {
-    if (user?.role === 'patient') {
-      const patient = user as Patient;
-      const updatedADRResults = [...(patient.adrTestResults || []), result];
+  
       
-      const updatedUser = {
-        ...patient,
-        adrTestResults: updatedADRResults
-      };
       
-      localStorage.setItem('mindfulCareUser', JSON.stringify(updatedUser));
-      setShowADRTest(false);
-      
-      toast({
-        title: "ADR Test completed",
-        description: `Your Adverse Drug Reaction test for ${result.medicationName} has been recorded.`,
-      });
-      
-      // Update the form data
-      setFormData(updatedUser);
-      setActiveTab('profile');
-    }
-  };
 
   const updatePatientData = (updatedPatient: Patient) => {
     localStorage.setItem('mindfulCareUser', JSON.stringify(updatedPatient));
@@ -116,17 +96,6 @@ const Profile = () => {
     }
   };
 
-  const getADRSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'Severe': 
-      case 'Life-threatening': 
-        return 'text-red-600 bg-red-50';
-      case 'Moderate': return 'text-orange-600 bg-orange-50';
-      case 'Mild': return 'text-yellow-600 bg-yellow-50';
-      case 'None': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
-    }
-  };
 
   if (!isAuthenticated || !user) {
     return (
